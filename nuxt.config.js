@@ -18,10 +18,16 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '~/static/css/global.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/axios',
+    '~/api/courseManage',
+    '~/api/picture',
+    '~/api/webConfig',
+    '~/api/agreement'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -36,14 +42,20 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/router',
+    '@nuxtjs/proxy'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
+    proxy: true,
     baseURL: '/',
   },
-
+  proxy: {
+    '/api': {
+      target: 'http://testapi.xuexiluxian.cn'
+    }
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }

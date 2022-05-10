@@ -2,6 +2,12 @@
   "name": "restructure",
   "version": "1.0.0",
   "private": true,
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0",
+      "port": "80"
+    }
+  },
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
@@ -10,6 +16,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/proxy": "^2.1.0",
     "core-js": "^3.19.3",
     "nuxt": "^2.15.8",
     "vue": "^2.6.14",
