@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <indexHeader></indexHeader>
-    <navSwiper></navSwiper>
+    <navSwiper :categorys="categorys"></navSwiper>
     <newGoodCourse
       :newCourses="newCourses"
       :hotCourse="hotCourse"
@@ -81,14 +81,24 @@ export default {
     let resagreementByCode = await app.$getAgreementByCode('6HG6326I')
     //获取隐私协议
     let resPrivateAgreement = await app.$getAgreementByCode('6GFL2QGQ')
-    //返回数据
-    return {
-      newCourses,
-      hotCourse,
-      userServiceAgreement: resagreementByCode.data.data,
-      privateAgreement: resPrivateAgreement.data.data
-    }
-  },
+    // 获取课程一级分类
+    let resFirstCategory = await app.$axios({
+      url: '/api/course/category/getFirstCategorys',
+      method: 'GET',
+      header: {
+        'Content-Type': 'application/json',
+        // "Content-Type":"application/x-www-form-urlencoded"
+      },
+    })
+  //返回数据
+  return {
+    newCourses,
+    hotCourse,
+    userServiceAgreement: resagreementByCode.data.data,
+    privateAgreement: resPrivateAgreement.data.data,
+    categorys : resFirstCategory.data.list
+  }
+}
   //   async asyncData( app ){
   //     console.log('app',app);
   //   let res = await app.$getFirstCategorys();

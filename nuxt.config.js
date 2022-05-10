@@ -1,5 +1,6 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  // test admin123
   head: {
     title: 'restructure',
     htmlAttrs: {
@@ -18,16 +19,22 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    'element-ui/lib/theme-chalk/index.css',
     '~/static/css/global.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/element',
     '~/plugins/axios',
     '~/api/courseManage',
     '~/api/picture',
     '~/api/webConfig',
-    '~/api/agreement'
+    '~/api/agreement',
+    '~/api/courseTag',
+    '~/api/shopcar',
+    '~/api/token',
+    '~/api/auth',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
