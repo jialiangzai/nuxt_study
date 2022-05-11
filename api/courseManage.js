@@ -33,7 +33,7 @@ export default ({ $axios }, inject) => {
 
 
 	//检查是否有权限
-	inject('checkAuth',(courseId)=>$axios({
+	inject('checkAuthWithChapterId',(courseId)=>$axios({
 		url:'/api/course/checkAuth',
         method:'GET',
         params:{courseId},
@@ -51,5 +51,15 @@ export default ({ $axios }, inject) => {
 		url:'/api/player/play',
         method:'GET',
         params:{courseId,chapterId},
+	}))
+  
+	//获取学习时长
+	inject('updateStudyHour',(data,token)=>$axios({
+		url:'/api/member/updateStudyHour',
+        method:'POST',
+        data,
+        headers: {
+            'token':token
+        }
 	}))
 }

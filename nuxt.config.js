@@ -20,7 +20,8 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'element-ui/lib/theme-chalk/index.css',
-    '~/static/css/global.css'
+    '~/static/css/global.css',
+    'video.js/dist/video-js.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -36,7 +37,9 @@ export default {
     '~/api/token',
     '~/api/auth',
     '~/api/sms',
-    '~/api/courseCategory'
+    '~/api/courseCategory',
+    '~/api/history',
+    '~/api/favorite'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -52,7 +55,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/router',
     '@nuxtjs/proxy',
-    'cookie-universal-nuxt'
+    'cookie-universal-nuxt',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

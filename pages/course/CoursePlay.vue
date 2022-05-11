@@ -3,49 +3,36 @@
         <router-view></router-view>
        <!--  <indexHeader></indexHeader> -->
         <coursePlayMain></coursePlayMain>
-        <Foot :webconfig='webconfig'></Foot>
+         <foot
+      :userServiceAgreement="userServiceAgreement"
+      :privateAgreement="privateAgreement"
+    ></foot>
 
     </div>
 </template>
 
 
 <script>
-import indexHeader from '@/components/index/header.vue';
-import Foot from '@/components/foot/foot.vue';
+import indexHeader from '@/components/index/header.vue'
+import foot from '@/components/foot/foot.vue'
 import coursePlayMain from '@/components/course/coursePlayMain.vue'
-import {webConfig} from '@/common/api/webConfig.js'
 
 export default {
-    data(){
-        return{
-            webconfig:{}
-        }
-    },
-    beforeCreate(){
-        document.documentElement.scrollTop = 0;
-    },
-  metaInfo: {
-    title: '鹿线课堂',
-    meta: [
-      {
-        name: 'keyWords',
-        content: 'My Example App',
-      },
-    ],
-  },
-  created() {
-    this.__init()
-  },
-  methods: {
-    async __init(){
-      let res = await webConfig()
-      this.webconfig = res.data.data
-    }
-  },
   components: {
     indexHeader,
-    coursePlayMain,
-    Foot
+    // coursePlayMain,
+    foot
   },
+    async asyncData (app) {
+    // 服务协议
+    let resagreementByCode = await app.$getAgreementByCode('6HG6326I')
+    //获取隐私协议
+    let resPrivateAgreement = await app.$getAgreementByCode('6GFL2QGQ')
+    return {
+      userServiceAgreement: resagreementByCode.data.data,
+      privateAgreement: resPrivateAgreement.data.data,
+    }
+  },
+
 };
 </script>
