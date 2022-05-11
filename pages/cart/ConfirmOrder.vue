@@ -1,8 +1,7 @@
 <template>
-  <div class="courseplay">
-    <router-view></router-view>
-    <!--  <indexHeader></indexHeader> -->
-    <coursePlayMain></coursePlayMain>
+  <div class="course">
+    <indexHeader></indexHeader>
+    <confirmOrder></confirmOrder>
     <foot
       :userServiceAgreement="userServiceAgreement"
       :privateAgreement="privateAgreement"
@@ -13,14 +12,19 @@
 
 <script>
 import indexHeader from '@/components/index/header.vue'
+import confirmOrder from '@/components/cart/confirmOrder.vue'
 import foot from '@/components/foot/foot.vue'
-import coursePlayMain from '@/components/course/coursePlayMain.vue'
 
 export default {
-  components: {
+  data () {
+    return {
+
+    }
+  },
+  component: {
     indexHeader,
-    // coursePlayMain,
-    foot
+    confirmOrder,
+    foot,
   },
   async asyncData (app) {
     // 服务协议
@@ -32,6 +36,5 @@ export default {
       privateAgreement: resPrivateAgreement.data.data,
     }
   },
-
-};
+}
 </script>

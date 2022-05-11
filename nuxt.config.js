@@ -39,7 +39,8 @@ export default {
     '~/api/sms',
     '~/api/courseCategory',
     '~/api/history',
-    '~/api/favorite'
+    '~/api/favorite',
+    '~/api/payment'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

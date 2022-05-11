@@ -16,8 +16,8 @@ import CoursePlay from '@/pages/course/CoursePlay.vue'
 // import Setbindsns from '@/pages/user/components/Setbindsns.vue';
 // import Setprofile from '@/pages/user/components/Setprofile.vue';
 // import Setavator from '@/pages/user/components/Setavator.vue';
-// import Cart from '@/pages/cart/Cart.vue';
-// import ConfirmOrder from '@/pages/cart/ConfirmOrder.vue';
+import Cart from '@/pages/cart/Cart.vue';
+import ConfirmOrder from '@/pages/cart/ConfirmOrder.vue';
 // import  Loading from '@/pages/loading/index.vue'
 // import PaySuccess from '@/pages/paySuccess/index.vue'
 // import PayFail from '@/pages/payFail/index.vue'
@@ -95,8 +95,8 @@ const routes = [
   //   ]
 
   // },
-  // {path: '/cart', component: Cart,name:'cart',meta:{ requiresAuth : true }},
-  // {path: '/confirmOrder', component: ConfirmOrder,name:'confirmOrder',meta:{ requiresAuth : true }},
+  {path: '/cart', component: Cart,name:'cart',meta:{ requiresAuth : true }},
+  {path: '/confirmOrder', component: ConfirmOrder,name:'confirmOrder',meta:{ requiresAuth : true }},
   // {path:'/paySuccess',component: PaySuccess,name:'paySuccess'},
   // {path:'/payFail',component: PayFail,name:'payFail'},
   // {path:'/vipSuccess',component: VipSuccess,name:'vipSuccess'},
@@ -113,6 +113,12 @@ const routes = [
 
 // export default router;
 
+//获取原型对象上的push函数
+const originalPush = Router.prototype.push
+//修改原型对象中的push方法
+Router.prototype.push = function push(location) {
+   return originalPush.call(this, location).catch(err => err)
+}
 export function createRouter() {
   return new Router({
     mode: 'history',

@@ -1,8 +1,7 @@
 <template>
-  <div class="courseplay">
-    <router-view></router-view>
-    <!--  <indexHeader></indexHeader> -->
-    <coursePlayMain></coursePlayMain>
+  <div class="course">
+    <indexHeader></indexHeader>
+    <Layout></Layout>
     <foot
       :userServiceAgreement="userServiceAgreement"
       :privateAgreement="privateAgreement"
@@ -13,13 +12,15 @@
 
 <script>
 import indexHeader from '@/components/index/header.vue'
+import Layout from '@/components/cart/layout.vue'
 import foot from '@/components/foot/foot.vue'
-import coursePlayMain from '@/components/course/coursePlayMain.vue'
+// import {webConfig} from '@/common/api/webConfig.js'
 
 export default {
+
   components: {
     indexHeader,
-    // coursePlayMain,
+    Layout,
     foot
   },
   async asyncData (app) {
@@ -32,6 +33,7 @@ export default {
       privateAgreement: resPrivateAgreement.data.data,
     }
   },
-
 };
 </script>
+<style scoped>
+</style>
