@@ -354,17 +354,18 @@
       </div>
     </el-dialog>
     <!--行为验证-->
-    <!-- <Verify
+    <Verify
+    v-if="isVerify"
         ref="verify"
         :captcha-type="'blockPuzzle'"
         :img-size="{width:'400px',height:'200px'}"
         @success="success"
-        @error="error"/> -->
+        @error="error"/>
   </div>
 </template>
 
 <script>
-// import Verify from '../verifition/Verify'
+import Verify from '../verifition/Verify'
 // import { sendRegisterOrLoginCaptcha } from '@/common/api/sms'
 // import {
 //   loginByJson,
@@ -385,6 +386,8 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   data () {
     return {
+      // 滑块
+      isVerify:false,
       rememberMe: false, // 是否点击了记住我 用户名密码登录记住我
       identifiyRememberMe: false, // 手机号登录记住我
       courseColor: -1, // 鼠标移上显示颜色
@@ -548,7 +551,10 @@ export default {
     this.getPrivateAgreement("6GFL2QGQ")//
   },
   components: {
-    // Verify,
+    Verify,
+  },
+  mounted() {
+    this.isVerify = true
   },
   methods: {
     ...mapActions([
@@ -1018,7 +1024,7 @@ export default {
     },
     // 发送请求
     sendCode (mobile) {
-      sendRegisterOrLoginCaptcha({
+      this.$sendRegisterOrLoginCaptcha({
         mobile: mobile,
       })
         .then((res) => {
