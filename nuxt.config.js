@@ -2,7 +2,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   // test admin123
   head: {
-    title: 'restructure',
+    title: 'NUXT',
     htmlAttrs: {
       lang: 'en'
     },
@@ -35,7 +35,8 @@ export default {
     '~/api/shopcar',
     '~/api/token',
     '~/api/auth',
-    '~/api/sms'
+    '~/api/sms',
+    '~/api/courseCategory'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
