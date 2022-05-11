@@ -1,6 +1,6 @@
 
 export default {
-	state:{
+	state:()=>({
 		userInfo: {
 			avatar: '/image/common/avator.png',
 			nickname: '小鹿线-默认',
@@ -13,7 +13,7 @@ export default {
 		// isLogin: JSON.parse(localStorage.getItem('isLogin'))  || false,
     cartNum: 0,
     loginDialog:false
-	},
+	}),
 	getters:{
 		avatar:state => state.userInfo.avatar
 	},

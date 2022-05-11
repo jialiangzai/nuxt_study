@@ -1,8 +1,8 @@
 
 export default {
-    state : {
+    state:()=> ({
         progressList: [], // 文件下载进度列表
-    },
+    }),
 
     mutations : {
         SET_PROGRESS: (state, progressObj)=>{ // 修改进度列表
