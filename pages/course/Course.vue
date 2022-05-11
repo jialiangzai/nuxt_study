@@ -8,7 +8,6 @@
       :secondArr = "secondArr"
     ></coursemain>
     <foot
-      :webconfig="webconfig"
       :userServiceAgreement="userServiceAgreement"
       :privateAgreement="privateAgreement"
     ></foot>
@@ -29,16 +28,10 @@ export default {
   },
   data () {
     return {
-      webconfig: {}
     }
   },
   metaInfo () {
     return {
-      title: this.webconfig.title, // set a title
-      meta: [{ // set meta
-        name: this.webconfig.keywords,
-        content: this.webconfig.description
-      }]
     }
   },
 

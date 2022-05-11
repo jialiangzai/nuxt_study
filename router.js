@@ -4,7 +4,7 @@ import Router from 'vue-router';
 import Home from '@/pages/Home.vue';
 import Course from '@/pages/course/Course.vue';
 import CourseSearch from '@/pages/course/CourseSearch'
-// import CourseInfo from '@/pages/course/CourseInfo.vue'
+import CourseInfo from '@/pages/course/CourseInfo.vue'
 // import CoursePlay from '@/pages/course/CoursePlay.vue'
 // import Member from '@/pages/Member.vue';
 // import About from '@/pages/about/About.vue';
@@ -31,7 +31,7 @@ const routes = [
   { path: '/home', component: Home ,name:'home'},
   { path: '/course', component: Course ,name:'course'},
   { path: '/course-search/:id', component: CourseSearch ,name:'CourseSearch'},
-  // { path:'/course-info/:courseId',component:CourseInfo,name:'course-info'},
+  { path:'/course-info/:courseId',component:CourseInfo,name:'course-info'},
   // {path: '/loading',component: Loading,name: 'loading'},
   // { path:'/course-play/:courseId/:chapterId',component:CoursePlay,name:'course-play',meta:{ requiresAuth : false }},
   // { path: '/member', component: Member ,name:'member'},
