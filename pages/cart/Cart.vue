@@ -17,7 +17,7 @@ import foot from '@/components/foot/foot.vue'
 // import {webConfig} from '@/common/api/webConfig.js'
 
 export default {
-
+  middleware:['each'],
   components: {
     indexHeader,
     Layout,
