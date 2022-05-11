@@ -3,9 +3,9 @@ export default ({ $axios }, inject) => {
   inject('getShopCarCounter', () => $axios({
     url: '/api/shopcar/getShopCarCounter',
     method: 'GET',
-    headers: {
-      'Authorization': Decrypt(localStorage.getItem('token'))
-    }
+    // headers: {
+    //   'Authorization': Decrypt(localStorage.getItem('token'))
+    // }
   }))
   // 手机 加 密码登陆
   inject('loginByJson', (params) => $axios({
@@ -36,17 +36,17 @@ export default ({ $axios }, inject) => {
   inject('getInfo', ({ token }) => $axios({
     url: '/api/member/getInfo?token=' + token,
     method: 'GET',
-    headers: {
-      'Authorization': Decrypt(localStorage.getItem('token'))
-    }
+    // headers: {
+    //   'Authorization': Decrypt(localStorage.getItem('token'))
+    // }
   }))
   // 获取购物车数据
   inject('getShopCarCounter', () => $axios({
     url: '/api/shopcar/getShopCarCounter',
     method: 'GET',
-    headers: {
-      'Authorization': Decrypt(localStorage.getItem('token'))
-    }
+    // headers: {
+    //   'Authorization': Decrypt(localStorage.getItem('token'))
+    // }
   }))
   // 获取 token /token/createToken
   inject('loginByMobile', () => $axios({

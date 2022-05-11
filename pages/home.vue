@@ -30,7 +30,7 @@ export default {
     let newCourses = []
     let hotCourse = []
     // 获取新课程
-    console.log('app', app.$getNewCourse)
+    // console.log('app', app.$getNewCourse)
     let resNewCourses = await app.$getNewCourse(
       {
         pageNum: 1,

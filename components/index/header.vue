@@ -380,7 +380,7 @@ import { Loading } from 'element-ui'
 // cookie
 // import Cookies from "js-cookie"
 // import { getAgreementByCode } from '@/api/agreement'
-import { Encrypt, Decrypt } from '@/utils/aes.js'
+import { Encrypt, Decrypt } from '~/utils/aes.js'
 import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   data () {
@@ -530,14 +530,16 @@ export default {
       isLogin: (state) => state.user.isLogin,
       cartNum: (state) => state.user.cartNum,
       loginDialog: (state) => state.user.loginDialog,
+			token:(state)=>state.user.token
     }),
   },
   created () {
-    // if (localStorage.getItem('token')) {
-    //   // 获取购车数据
-    //   this.getCarNum()
-    //   this.getUserInfo()
-    // }
+		// console.log('我拿到tokne了',this.token);
+    if (this.token) {
+      // 获取购车数据
+      this.getCarNum()
+      this.getUserInfo()
+    }
 
     // 获取搜索框数据
     this.copySearch()
@@ -554,7 +556,7 @@ export default {
       'saveLoginAction',
       'saveCartNumAction',
     ]),
-    ...mapMutations(['saveLoginDialog']),
+    ...mapMutations(['saveLoginDialog','setToken','removeToken']),
     //获取服务协议
     getServiceAgreement (code) {
       this.$getAgreementByCode(code).then(res => {
@@ -807,8 +809,7 @@ export default {
                 this.$store.commit('saveLoginDialog', false)
                 let accessToken = res.data.accessToken
                 // 存储到access中
-                // localStorage.setItem('token', Encrypt(accessToken))
-                // localStorage.setItem('isLogin', JSON.stringify(true))
+								this.setToken(Encrypt(accessToken))
                 this.saveLoginAction()
                 this.getCarNum()
                 this.getUserInfo()
@@ -871,8 +872,8 @@ export default {
                 let accessToken = res.data.accessToken
                 // 存储到access中
                 // setToken(accessToken)
-                // localStorage.setItem('token', Encrypt(accessToken))
-                // localStorage.setItem('isLogin', JSON.stringify(true))
+								// console.log('accessToken',accessToken);
+								this.setToken(Encrypt(accessToken))
                 // sessionStorage.setItem('token', accessToken)
                 // 获取个人信息
                 this.getUserInfo()
@@ -1079,18 +1080,18 @@ export default {
     },
     // 获取购物车数据
     getCarNum () {
-      // if (localStorage.getItem('token')) {
-      //   this.$getShopCarCounter().then((res) => {
-      //     if (res.meta.code == '200') {
-      //       this.saveCartNumAction(res.data.counter)
-      //     } else {
-      //       this.$message({
-      //         message: res.meta.msg,
-      //         type: 'error',
-      //       })
-      //     }
-      //   })
-      // }
+      if (this.token) {
+        this.$getShopCarCounter().then((res) => {
+          if (res.meta.code == '200') {
+            this.saveCartNumAction(res.data.counter)
+          } else {
+            this.$message({
+              message: res.meta.msg,
+              type: 'error',
+            })
+          }
+        })
+      }
     },
     // 返回登陆页面
     backLogin () {
@@ -1135,9 +1136,7 @@ export default {
                 message: '退出成功!',
               })
 
-              // localStorage.removeItem('token')
-              // ocalStorage.removeItem('userInfo')
-              // localStorage.removeItem('isLogin')
+              this.removeToken()
               this.$router.push("/")
               // this.$router.go(0)
               this.saveLoginAction(false)
