@@ -6,11 +6,7 @@
           <div class="title-name">课程方向：</div>
           <div class="all-items">
             <el-tag
-              :class="
-                indexObj.indexWhere === undefined
-                  ? 'category-poniter'
-                  : 'category-poniter category-poniter-item'
-              "
+              class="category-poniter"
               effect="plain"
               type="info"
               @click="buildingCondition('fcategory', null)"
@@ -19,9 +15,9 @@
             </el-tag>
             <el-tag
               :class="
-                indexObj.indexWhere === index
+                indexObj.indexWhere === item.id
                   ? 'category-poniter'
-                  : 'category-poniter category-poniter-item'
+                  : 'category-poniter-item'
               "
               v-for="(item, index) in firstArr"
               :key="index"
@@ -40,11 +36,7 @@
               effect="plain"
               type="info"
               @click="buildingCondition('scategory', null)"
-              :class="
-                indexObj.indexType === undefined
-                  ? 'category-poniter'
-                  : 'category-poniter category-poniter-item'
-              "
+              class="category-poniter"
             >
               全部
             </el-tag>
@@ -55,9 +47,9 @@
               effect="plain"
               type="info"
               :class="
-                indexObj.indexType === index
+                 indexObj.indexType === item.id
                   ? 'category-poniter'
-                  : 'category-poniter category-poniter-item'
+                  : 'category-poniter-item'
               "
               >{{ item.categoryName }}
             </el-tag>
@@ -67,10 +59,8 @@
           <div class="title-name">课程难度：</div>
           <div class="all-items">
             <el-tag
-              :class="
-                indexObj.indexEasy === undefined
-                  ? 'category-poniter'
-                  : 'category-poniter category-poniter-item'
+              class="
+               category-poniter
               "
               effect="plain"
               type="info"
@@ -80,9 +70,9 @@
             </el-tag>
             <el-tag
               :class="
-                indexObj.indexEasy === index
+                indexObj.indexWhere === item.id
                   ? 'category-poniter'
-                  : 'category-poniter category-poniter-item'
+                  : 'category-poniter-item'
               "
               effect="plain"
               type="info"
@@ -244,8 +234,8 @@ export default {
   data () {
     return {
       indexObj: {
-        indexWhere: undefined,
-        indexType: undefined,
+        indexWhere: this.$route.params.id,
+        indexType: this.$route.params.id,
         indexEasy: undefined
       },
       categorysDetail: [],
@@ -295,6 +285,9 @@ export default {
     }
   },
   created () {
+    if( this.$cookies.get('firstCategory')  ){
+        this.indexObj.indexWhere = this.$cookies.get('firstCategory');
+    }
     this.watchUrl()
     this.tokens = this.$cookies.get('token')
     let courseType = this.$cookies.get('serarch:course:type')
@@ -707,20 +700,27 @@ export default {
   color: #2c80ff;
 }
 
+.category-poniter-item {
+  height: 25px;
+  line-height: 25px;
+  margin: 10px 5px;
+  cursor: pointer;
+  border: none !important;
+  background: none;
+  color: rgba(81, 87, 89, 1);
+}
+
+
 .category-poniter {
   height: 25px;
   line-height: 25px;
   margin: 10px 5px;
   cursor: pointer;
   border: none !important;
-  background: rgba(44, 128, 255, 0.1);
-  color: #2c80ff;
+  background: rgba(44, 128, 255, 0.1)!important;
+  color: #2c80ff!important;
 }
 
-.category-poniter-item {
-  background: none;
-  color: rgba(81, 87, 89, 1);
-}
 
 /* 分类结束 */
 
