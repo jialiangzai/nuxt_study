@@ -232,12 +232,12 @@ export default {
   data () {
     return {
       indexObj: {
-        // indexWhere:this.$cookies.get('firstCategory'),
-        // indexType:this.$cookies.get('scategory'),
-        // indexEasy:this.$route.params.id
-        indexWhere: this.$route.params.id,
-        indexType: this.$route.params.id,
-        indexEasy: this.$route.params.id
+        indexWhere:this.$cookies.get('firstCategory'),
+        indexType:this.$cookies.get('scategory'),
+        indexEasy:this.$route.params.id
+        // indexWhere: this.$route.params.id,
+        // indexType: this.$route.params.id,
+        // indexEasy: this.$route.params.id
       },
       categorysDetail: [],
       priceSortBy: '',
