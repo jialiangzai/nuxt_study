@@ -342,7 +342,7 @@ export default {
       //点击课程方向
       if (type === 'fcategory') {
         this.$router.push({
-          path:object?`/course-search/${object.id}`:'/course',
+          path:`/course-search/${object.id}`,
           query:{
             type:"fcategory"
           }
@@ -350,7 +350,7 @@ export default {
       //点击课程分类
       } else if (type === 'scategory') {
         this.$router.push({
-          path:object?`/course-search/${object.id}`:'/course',
+          path:`/course-search/${object.id}`,
           query:{
             type:"scategory"
           }
@@ -358,7 +358,7 @@ export default {
       //点击课程 初级、中级、高级
       } else if (type === 'clevel') {
         this.$router.push({
-         path:object?`/course-search/${object.id}`:'/course',
+         path:`/course-search/${object.code}`,
           query:{
             type:"clevel"
           }

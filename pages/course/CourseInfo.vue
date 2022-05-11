@@ -38,7 +38,7 @@ export default {
   async asyncData (app) {
     let res = await app.$getcourseInfo(app.route.params.courseId)
     let courseInfoArr = res.data.data
-    console.log('res', courseInfoArr, app.route.params.courseId)
+    // console.log('res', courseInfoArr, app.route.params.courseId)
     let courseDetail = res.data.data.bizCourseDetail
     let courseChapters = res.data.data.bizCourseChapters
     let downsource = res.data.data.bizCourseAttachments

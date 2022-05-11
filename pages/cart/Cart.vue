@@ -15,7 +15,6 @@ import indexHeader from '@/components/index/header.vue'
 import Layout from '@/components/cart/layout.vue'
 import foot from '@/components/foot/foot.vue'
 // import {webConfig} from '@/common/api/webConfig.js'
-w
 export default {
   middleware:['each'],
   components: {
