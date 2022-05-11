@@ -47,7 +47,7 @@
               effect="plain"
               type="info"
               :class="
-                 indexObj.indexType === item.id
+                indexObj.indexType === item.id
                   ? 'category-poniter'
                   : 'category-poniter-item'
               "
@@ -59,9 +59,7 @@
           <div class="title-name">课程难度：</div>
           <div class="all-items">
             <el-tag
-              class="
-               category-poniter
-              "
+              class="category-poniter"
               effect="plain"
               type="info"
               @click="buildingCondition('clevel', null)"
@@ -70,7 +68,7 @@
             </el-tag>
             <el-tag
               :class="
-                indexObj.indexWhere === item.id
+                indexObj.indexEasy == item.code
                   ? 'category-poniter'
                   : 'category-poniter-item'
               "
@@ -234,9 +232,12 @@ export default {
   data () {
     return {
       indexObj: {
+        // indexWhere:this.$cookies.get('firstCategory'),
+        // indexType:this.$cookies.get('scategory'),
+        // indexEasy:this.$route.params.id
         indexWhere: this.$route.params.id,
         indexType: this.$route.params.id,
-        indexEasy: undefined
+        indexEasy: this.$route.params.id
       },
       categorysDetail: [],
       priceSortBy: '',
@@ -285,8 +286,8 @@ export default {
     }
   },
   created () {
-    if( this.$cookies.get('firstCategory')  ){
-        this.indexObj.indexWhere = this.$cookies.get('firstCategory');
+    if (this.$cookies.get('firstCategory')) {
+      this.indexObj.indexWhere = this.$cookies.get('firstCategory')
     }
     this.watchUrl()
     this.tokens = this.$cookies.get('token')
@@ -333,263 +334,240 @@ export default {
     },
     // 构建搜索条件并搜索
     buildingCondition (type, object, index) {
-      this.queryParams.entity = {}
+      // if (!object) {
+      //   this.$router.push({
+      //     path:`/course`,
+      //   })
+      // }
+      //点击课程方向
       if (type === 'fcategory') {
-        // 客户端交互行为
         this.$router.push({
-          path: `/course-search/${object.id}`,
-          query: {
-            type: "fcategory"
+          path:object?`/course-search/${object.id}`:'/course',
+          query:{
+            type:"fcategory"
           }
         })
-        //   object = object != null ? object : -1;
-        //   // this.getSecondCategorys(object.id)
-        //   this.indexObj.indexWhere = index
-        //   this.indexObj.indexType = undefined
-        //   this.indexObj.indexEasy = undefined
-        //   this.queryParams.entity.firstCategory = (object && object.id) ? object.id : '';
-
-        //   sessionStorage.setItem("firstCategory", this.queryParams.entity.firstCategory);
-        // this.queryParams.entity.secondCategory = sessionStorage.getItem("secondCategory");
-        // this.queryParams.entity.courseLevel = sessionStorage.getItem("courseLevel");
-        //   this.clickFirstCategory = object.id
-        //   this.queryParams.entity.secondCategory = '';
-        //   this.queryParams.entity.courseLevel = '';
-        //   if (object && object.id) {
-        //     this.buildingSelectedCondition({
-        //       text: object.categoryName,
-        //       code: object.id,
-        //       type: 'fcategory'
-        //     });
-        //   }
-      }
-      if (type === 'scategory') {
+      //点击课程分类
+      } else if (type === 'scategory') {
         this.$router.push({
-          path: `/course-search/${object.id}`,
-          query: {
-            type: "scategory"
+          path:object?`/course-search/${object.id}`:'/course',
+          query:{
+            type:"scategory"
           }
-        })}
-       if (type === 'clevel') {
-          object = object != null ? object : -1
-          this.indexObj.indexEasy = index
-          this.queryParams.entity.courseLevel = (object && object.code) ? object.code : ''
-          sessionStorage.setItem("courseLevel", this.queryParams.entity.courseLevel)
-          this.queryParams.entity.secondCategory = sessionStorage.getItem("secondCategory")
-          this.queryParams.entity.firstCategory = sessionStorage.getItem("firstCategory")
-          this.clickCourseLevel = object.code
-          if (object && object.code) {
-            this.buildingSelectedCondition({
-              text: object.text,
-              code: object.code,
-              type: 'clevel'
-            })
+        })
+      //点击课程 初级、中级、高级
+      } else if (type === 'clevel') {
+        this.$router.push({
+         path:object?`/course-search/${object.id}`:'/course',
+          query:{
+            type:"clevel"
           }
-        }
-        //this.queryCourse(this.queryParams);
-      },
-      //加入购物车
-      addCart(item) {
-        if (!this.tokens) {
-          this.$message({
-            message: '请先登录才能加入购物车哦',
-            type: 'error'
+        })
+      }
+      //this.queryCourse(this.queryParams);
+    },
+    //加入购物车
+    addCart (item) {
+      if (!this.tokens) {
+        this.$message({
+          message: '请先登录才能加入购物车哦',
+          type: 'error'
+        })
+        this.$store.commit('saveLoginDialog', true)
+        return
+      }
+      this.$createToken()
+        .then(res => {
+          this.token = res.data.token
+          this.memberId = this.userInfo.id
+          this.$addShopCar({
+            courseId: item.id,
+            memberId: this.memberId,
+            token: this.token
           })
-          this.$store.commit('saveLoginDialog', true)
-          return
-        }
-        this.$createToken()
-          .then(res => {
-            this.token = res.data.token
-            this.memberId = this.userInfo.id
-            this.$addShopCar({
-              courseId: item.id,
-              memberId: this.memberId,
-              token: this.token
+            .then(res => {
+              if (res.meta.code === '200') {
+                this.$getShopCarCounter()
+                  .then((res) => {
+                    if (res.meta.code == '200') {
+                      this.saveCartNumAction(res.data.counter)
+                    } else {
+                      this.$message({
+                        message: res.meta.msg,
+                        type: 'error',
+                      })
+                    }
+                  })
+                this.$message({
+                  message: '恭喜你，加入购物车成功',
+                  type: 'success'
+                })
+              } else if (res.meta.code === '20003') {
+                this.$message({
+                  message: '该商品已在购物车，请勿重复添加',
+                  type: 'error'
+                })
+              }
             })
-              .then(res => {
-                if (res.meta.code === '200') {
-                  this.$getShopCarCounter()
-                    .then((res) => {
-                      if (res.meta.code == '200') {
-                        this.saveCartNumAction(res.data.counter)
-                      } else {
-                        this.$message({
-                          message: res.meta.msg,
-                          type: 'error',
-                        })
-                      }
-                    })
-                  this.$message({
-                    message: '恭喜你，加入购物车成功',
-                    type: 'success'
-                  })
-                } else if (res.meta.code === '20003') {
-                  this.$message({
-                    message: '该商品已在购物车，请勿重复添加',
-                    type: 'error'
-                  })
-                }
-              })
-          })
-      },
-      //免费课程还是会员课程
-      changeFreeOrMember(e) {
-        // this.queryParams.entity = {}
-        if (e === '1') {
-          this.active = false
-          this.active2 = false
-          this.active3 = false
-          this.priceSortBy = ''
-          this.queryParams.entity.firstCategory = this.clickFirstCategory
-          this.queryParams.entity.secondCategory = this.clickSecondCategory
-          this.queryParams.entity.courseLevel = this.clickCourseLevel
-          this.queryParams.entity.sortBy = ''
-          this.queryParams.entity.isMember = ''
-          this.queryParams.entity.isFree = '1'
-          //this.queryCourse(this.queryParams);
-        } else if (e === '2') {
-          this.active = false
-          this.active2 = false
-          this.active3 = false
-          this.priceSortBy = ''
-          this.queryParams.entity.firstCategory = this.clickFirstCategory
-          this.queryParams.entity.secondCategory = this.clickSecondCategory
-          this.queryParams.entity.courseLevel = this.clickCourseLevel
-          this.queryParams.entity.sortBy = ''
-          this.queryParams.entity.isFree = ''
-          this.queryParams.entity.isMember = '1'
-          //this.queryCourse(this.queryParams);
-        }
-      },
-      //升降序排列
-      handlePrice() {
-        // this.queryParams.entity = {}
-        let queryParams = {
-          pageNum: 1,
-          pageSize: 12,
-          entity: {}
-        }
-        if (this.priceSortBy === '1' || this.priceSortBy === '') {
-          this.active = false
-          this.active2 = false
-          this.active3 = false
-          queryParams.entity.firstCategory = this.clickFirstCategory
-          queryParams.entity.secondCategory = this.clickSecondCategory
-          queryParams.entity.courseLevel = this.clickCourseLevel
-          queryParams.entity.sortBy = 'price-asc'
-          this.queryCourse(queryParams)
-          this.priceSortBy = '2'
-        } else {
-          this.active = false
-          this.active2 = false
-          this.active3 = false
-          queryParams.entity.firstCategory = this.clickFirstCategory
-          queryParams.entity.secondCategory = this.clickSecondCategory
-          queryParams.entity.courseLevel = this.clickCourseLevel
-          queryParams.entity.sortBy = 'price-desc'
-          this.queryCourse(queryParams)
-          this.priceSortBy = '1'
-        }
-      },
-
-      //点击综合
-      handleZonghe() {
-        // this.queryParams.entity = {}
-        this.active = !this.active
+        })
+    },
+    //免费课程还是会员课程
+    changeFreeOrMember (e) {
+      // this.queryParams.entity = {}
+      if (e === '1') {
+        this.active = false
         this.active2 = false
         this.active3 = false
-        let queryParams = {
-          pageNum: 1,
-          pageSize: 12,
-          entity: {
-            firstCategory: this.clickFirstCategory,
-            secondCategory: this.clickSecondCategory,
-            courseLevel: this.clickCourseLevel,
-            sortBy: '',
-          }
-        }
-        this.isFreeOrIsMember = ''
         this.priceSortBy = ''
-        this.queryCourse(queryParams)
-      },
-      //点击最新课程
-      handleNewCourse() {
-        // this.queryParams.entity = {}
-        this.active2 = !this.active2
-        this.active = false
-        this.active3 = false
-        let queryParams = {
-          pageNum: 1,
-          pageSize: 12,
-          entity: {
-            firstCategory: this.clickFirstCategory,
-            secondCategory: this.clickSecondCategory,
-            courseLevel: this.clickCourseLevel,
-            sortBy: 'time-desc'
-          }
-        }
-        this.isFreeOrIsMember = ''
-        this.priceSortBy = ''
-        this.queryCourse(queryParams)
-      },
-      //最多购买
-      mostbuy() {
-        // this.queryParams.entity = {}
-        this.active3 = !this.active3
-        this.active2 = false
-        this.active = false
-        let queryParams = {
-          pageNum: 1,
-          pageSize: 12,
-          entity: {
-            firstCategory: this.clickFirstCategory,
-            secondCategory: this.clickSecondCategory,
-            courseLevel: this.clickCourseLevel,
-            sortBy: 'purchase-desc'
-          }
-        }
-        this.isFreeOrIsMember = ''
-        this.priceSortBy = ''
-        this.queryCourse(queryParams)
-      },
-      // //获取一级分类
-      // getFirstCategorys() {
-      //   this.$getFirstCategorys()
-      //       .then(res => {
-      //         if (res.meta.code = '200') {
-      //           this.firstArr = res.data.list;
-      //         }
-      //       });
-      // },
-      // 分页器
-      jumpPage(page) {
-        this.queryParams.pageNum = page
+        this.queryParams.entity.firstCategory = this.clickFirstCategory
+        this.queryParams.entity.secondCategory = this.clickSecondCategory
+        this.queryParams.entity.courseLevel = this.clickCourseLevel
+        this.queryParams.entity.sortBy = ''
+        this.queryParams.entity.isMember = ''
+        this.queryParams.entity.isFree = '1'
         //this.queryCourse(this.queryParams);
-      },
-
-      watchUrl() {
-        if (this.$route.query && this.$route.query.tagName) {
-          let searchKnowledge = decodeURI(this.$route.query.tagName)
-          if (searchKnowledge) {
-            this.queryParams.entity.tags = searchKnowledge
-          }
-        }
+      } else if (e === '2') {
+        this.active = false
+        this.active2 = false
+        this.active3 = false
+        this.priceSortBy = ''
+        this.queryParams.entity.firstCategory = this.clickFirstCategory
+        this.queryParams.entity.secondCategory = this.clickSecondCategory
+        this.queryParams.entity.courseLevel = this.clickCourseLevel
+        this.queryParams.entity.sortBy = ''
+        this.queryParams.entity.isFree = ''
+        this.queryParams.entity.isMember = '1'
+        //this.queryCourse(this.queryParams);
       }
     },
-    watch: {
-      $route: {
-        immediate: true,
-        handler (to, from) {
-          this.watchUrl()
-          let query = to.query
-          this.queryParams.entity.courseName = query.keywords
-          this.queryParams.entity.tags = query.searchKnowledge
-          //this.queryCourse(this.queryParams);
-        },
+    //升降序排列
+    handlePrice () {
+      // this.queryParams.entity = {}
+      let queryParams = {
+        pageNum: 1,
+        pageSize: 12,
+        entity: {}
+      }
+      if (this.priceSortBy === '1' || this.priceSortBy === '') {
+        this.active = false
+        this.active2 = false
+        this.active3 = false
+        queryParams.entity.firstCategory = this.clickFirstCategory
+        queryParams.entity.secondCategory = this.clickSecondCategory
+        queryParams.entity.courseLevel = this.clickCourseLevel
+        queryParams.entity.sortBy = 'price-asc'
+        this.queryCourse(queryParams)
+        this.priceSortBy = '2'
+      } else {
+        this.active = false
+        this.active2 = false
+        this.active3 = false
+        queryParams.entity.firstCategory = this.clickFirstCategory
+        queryParams.entity.secondCategory = this.clickSecondCategory
+        queryParams.entity.courseLevel = this.clickCourseLevel
+        queryParams.entity.sortBy = 'price-desc'
+        this.queryCourse(queryParams)
+        this.priceSortBy = '1'
+      }
+    },
+
+    //点击综合
+    handleZonghe () {
+      // this.queryParams.entity = {}
+      this.active = !this.active
+      this.active2 = false
+      this.active3 = false
+      let queryParams = {
+        pageNum: 1,
+        pageSize: 12,
+        entity: {
+          firstCategory: this.clickFirstCategory,
+          secondCategory: this.clickSecondCategory,
+          courseLevel: this.clickCourseLevel,
+          sortBy: '',
+        }
+      }
+      this.isFreeOrIsMember = ''
+      this.priceSortBy = ''
+      this.queryCourse(queryParams)
+    },
+    //点击最新课程
+    handleNewCourse () {
+      // this.queryParams.entity = {}
+      this.active2 = !this.active2
+      this.active = false
+      this.active3 = false
+      let queryParams = {
+        pageNum: 1,
+        pageSize: 12,
+        entity: {
+          firstCategory: this.clickFirstCategory,
+          secondCategory: this.clickSecondCategory,
+          courseLevel: this.clickCourseLevel,
+          sortBy: 'time-desc'
+        }
+      }
+      this.isFreeOrIsMember = ''
+      this.priceSortBy = ''
+      this.queryCourse(queryParams)
+    },
+    //最多购买
+    mostbuy () {
+      // this.queryParams.entity = {}
+      this.active3 = !this.active3
+      this.active2 = false
+      this.active = false
+      let queryParams = {
+        pageNum: 1,
+        pageSize: 12,
+        entity: {
+          firstCategory: this.clickFirstCategory,
+          secondCategory: this.clickSecondCategory,
+          courseLevel: this.clickCourseLevel,
+          sortBy: 'purchase-desc'
+        }
+      }
+      this.isFreeOrIsMember = ''
+      this.priceSortBy = ''
+      this.queryCourse(queryParams)
+    },
+    // //获取一级分类
+    // getFirstCategorys() {
+    //   this.$getFirstCategorys()
+    //       .then(res => {
+    //         if (res.meta.code = '200') {
+    //           this.firstArr = res.data.list;
+    //         }
+    //       });
+    // },
+    // 分页器
+    jumpPage (page) {
+      this.queryParams.pageNum = page
+      //this.queryCourse(this.queryParams);
+    },
+
+    watchUrl () {
+      if (this.$route.query && this.$route.query.tagName) {
+        let searchKnowledge = decodeURI(this.$route.query.tagName)
+        if (searchKnowledge) {
+          this.queryParams.entity.tags = searchKnowledge
+        }
       }
     }
-  };
+  },
+  watch: {
+    $route: {
+      immediate: true,
+      handler (to, from) {
+        this.watchUrl()
+        let query = to.query
+        this.queryParams.entity.courseName = query.keywords
+        this.queryParams.entity.tags = query.searchKnowledge
+        //this.queryCourse(this.queryParams);
+      },
+    }
+  }
+};
 </script>
 
 
@@ -710,17 +688,15 @@ export default {
   color: rgba(81, 87, 89, 1);
 }
 
-
 .category-poniter {
   height: 25px;
   line-height: 25px;
   margin: 10px 5px;
   cursor: pointer;
   border: none !important;
-  background: rgba(44, 128, 255, 0.1)!important;
-  color: #2c80ff!important;
+  background: rgba(44, 128, 255, 0.1) !important;
+  color: #2c80ff !important;
 }
-
 
 /* 分类结束 */
 

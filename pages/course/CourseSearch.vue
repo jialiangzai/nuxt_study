@@ -58,8 +58,8 @@ export default {
     let type = app.route.query.type
     let arr = []
     let title = ''
-    let resSecondArr={}
-        //  参数
+    let resSecondArr = {}
+    //  参数
     let queryParams = {
       pageNum: 1,
       pageSize: 12,
@@ -96,12 +96,21 @@ export default {
       let firstCategoryId = app.$cookies.get('firstCategory')
       queryParams.entity.firstCategory = firstCategoryId
       queryParams.entity.secondCategory = id
+      app.$cookies.set('scategory', id)
       // //获取二级分类
       resSecondArr = await app.$getSecondCategorys(firstCategoryId)
       arr = resSecondArr.data.list.filter(item => item.id == id)
       title = arr[0].categoryName
     }
-
+    // 课程难度
+    if (type == 'clevel') {
+      let firstCategoryId = app.$cookies.get('firstCategory')
+      let scategory = app.$cookies.get('scategory')
+      queryParams.entity.firstCategory = firstCategoryId || ''
+      queryParams.entity.secondCategory = scategory || ''
+      queryParams.entity.courseLevel = id
+      resSecondArr = await app.$getSecondCategorys(firstCategoryId || -1)
+    }
     //获取课程
 
     let resArrcourse = await app.$queryCourse(queryParams)

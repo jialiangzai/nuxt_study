@@ -51,6 +51,8 @@ export default {
     foot
   },
   async asyncData (app) {
+     app.$cookies.remove('firstCategory');
+    app.$cookies.remove('scategory');
     let arrcourse = []
     let secondArr = []
     // 服务协议
